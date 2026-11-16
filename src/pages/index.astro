@@ -4,22 +4,28 @@ import { Image } from 'astro:assets';
 import { Icon } from 'astro-icon/components';
 
 import logo from '~/assets/images/shutterbuds/logo.png';
-import keyArt from '~/assets/images/shutterbuds/keyart.jpg';
-import photo1 from '~/assets/images/shutterbuds/photo1.jpg';
-import photo2 from '~/assets/images/shutterbuds/photo2.jpg';
-import photo3 from '~/assets/images/shutterbuds/photo3.jpg';
+import heroBg from '~/assets/images/shutterbuds/hero-bg.jpg';
+import buds from '~/assets/images/shutterbuds/buds.png';
+import snap1 from '~/assets/images/shutterbuds/snap1.jpg';
+import snap2 from '~/assets/images/shutterbuds/snap2.jpg';
+import snap3 from '~/assets/images/shutterbuds/snap3.jpg';
 
 // Update this number to move the progress bar.
 const SNAPS = 0;
 const GOAL = 1000;
-const pct = Math.min(100, Math.round((SNAPS / GOAL) * 100));
+const pct = Math.min(100, (SNAPS / GOAL) * 100);
 
 // Nav items are placeholders: they render but go nowhere.
-const navItems = ['The Game', 'Photos', 'Community'];
+const navItems = ['the game', 'snaps', 'buds'];
 
-const metadata = {
-  title: 'Race to 1000',
-};
+const jobSteps = [
+  'Snap anything. Statues, caves, your buds mid-trip.',
+  'Post it with #Shutterbuds',
+  'Drag your buds into it too',
+  'Hit 1000 and everyone who posted gets the prize!',
+];
+
+const metadata = { title: 'Race to 1000!' };
 ---
 
 <Layout metadata={metadata}>
@@ -27,17 +33,31 @@ const metadata = {
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&family=Patrick+Hand&display=swap"
       rel="stylesheet"
     />
   </Fragment>
+
+  <!-- Leaf shape, same idea as the in-game cursor -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="sb-leaf" viewBox="0 0 32 32">
+      <path
+        d="M16 2C9 7 5 13 6 20c.6 4 3.6 7 7 8l3 3 1.5-3.4C23 26 27 21 26.5 14 26 9 22 5 16 2Z"
+        fill="#9fd33a"
+        stroke="#2a3a14"
+        stroke-width="2.2"
+        stroke-linejoin="round"></path>
+      <path d="M16.5 27C16 19 15.5 12 16 5" fill="none" stroke="#2a3a14" stroke-width="1.8" stroke-linecap="round"
+      ></path>
+    </symbol>
+  </svg>
 
   <div class="sb">
     <!-- Header -->
     <header class="sb-header">
       <div class="sb-wrap sb-header-inner">
-        <span class="sb-logo" aria-label="Shutterbuds">
-          <Image src={logo} alt="Shutterbuds" width={400} class="sb-logo-img" loading="eager" />
+        <span class="sb-logo">
+          <Image src={logo} alt="shutterbuds" width={400} class="sb-logo-img" loading="eager" />
         </span>
         <nav aria-label="Main">
           <ul class="sb-nav">
@@ -55,43 +75,42 @@ const metadata = {
       </div>
     </header>
 
-    <!-- Progress -->
-    <section class="sb-progress" aria-label="Community goal progress">
-      <div class="sb-wrap sb-progress-inner">
-        <p class="sb-count">
-          <span class="sb-count-num">{SNAPS.toLocaleString()}</span>
-          <span class="sb-count-sep">/</span>
-          <span>{GOAL.toLocaleString()}</span>
-          <span class="sb-count-unit">photos</span>
-        </p>
+    <!-- Snap counter -->
+    <section class="sb-progress" aria-label="Snaps posted so far">
+      <p class="sb-count">
+        <span class="sb-count-num">{SNAPS}</span> / {GOAL}
+      </p>
+      <div class="sb-strip">
         <div
           class="sb-bar"
           role="progressbar"
           aria-valuemin="0"
           aria-valuemax={GOAL}
           aria-valuenow={SNAPS}
-          aria-label="Photos posted"
+          aria-label="Snaps posted"
         >
           <div class="sb-bar-fill" style={`width:${pct}%`}></div>
         </div>
       </div>
+      <p class="sb-count-note">snaps posted</p>
     </section>
 
     <!-- Hero -->
     <section class="sb-hero">
-      <Image
-        src={keyArt}
-        alt="A Shutterbud holding a camera on a forest path"
-        class="sb-hero-img"
-        widths={[640, 960, 1232]}
-        sizes="100vw"
-        loading="eager"
-      />
+      <Image src={heroBg} alt="" class="sb-hero-img" widths={[800, 1280, 1920]} sizes="100vw" loading="eager" />
       <div class="sb-hero-shade"></div>
-      <div class="sb-hero-copy">
-        <h1 class="sb-hero-title">Race to 1000!</h1>
-        <p class="sb-hero-sub">2 weeks · 1 goal · everybody wins</p>
+      <h1 class="sb-hero-title">Race to 1000!</h1>
+
+      <div class="sb-hero-stage">
+        <figure class="sb-polaroid">
+          <Image src={buds} alt="Three buds running with cameras" width={400} class="sb-polaroid-img" />
+          <figcaption>the buds, hard at work</figcaption>
+        </figure>
+        <div class="sb-crate" aria-label="Mystery prize">
+          <span>?</span>
+        </div>
       </div>
+      <div class="sb-mound" aria-hidden="true"></div>
     </section>
 
     <!-- Campaign -->
@@ -103,58 +122,78 @@ const metadata = {
 
       <div class="sb-grid">
         <!-- Unlock prize -->
-        <aside class="sb-side sb-side-left">
+        <aside class="sb-side">
           <Icon name="tabler:star-filled" class="sb-side-icon sb-star" />
-          <div class="sb-mystery" aria-hidden="true">?</div>
-          <p class="sb-tag">Unlocks at 1000</p>
+          <div class="sb-jar" aria-hidden="true">
+            <div class="sb-jar-lid"></div>
+            <div class="sb-jar-body">
+              <div class="sb-jar-blob"></div>
+              <span class="sb-jar-q">?</span>
+            </div>
+          </div>
           <h3 class="sb-side-title">Release</h3>
           <p class="sb-side-sub">a new creature</p>
+          <p class="sb-side-note">hit 1000 to pop the lid</p>
         </aside>
 
-        <!-- Main card -->
+        <!-- Job notice -->
         <article class="sb-card">
+          <div class="sb-tape" aria-hidden="true"></div>
           <div class="sb-card-text">
-            <h3 class="sb-card-title">Snap. Post. Unlock.</h3>
-            <p>
-              For two weeks, take photos in Shutterbuds and post them with <strong>#Shutterbuds</strong>. Every photo
-              counts toward one shared goal.
+            <p class="sb-card-kicker">
+              <svg class="sb-leaf" aria-hidden="true"><use href="#sb-leaf"></use></svg>
+              new job posted!
             </p>
-            <ol class="sb-steps">
-              <li>Snap a photo in-game.</li>
-              <li>Post it with <strong>#Shutterbuds</strong> and <strong>#RaceTo1000</strong>.</li>
-              <li>Help the community hit 1000 photos in 2 weeks.</li>
-              <li>Hit the goal and the prize unlocks for everyone who entered.</li>
-            </ol>
-            <p class="sb-card-note">Bring your buds. Every friend who posts gets us all closer.</p>
+            <h3 class="sb-card-title">You are jobless!</h3>
+            <p>
+              Not anymore. For the next 2 weeks every bud gets the same job: take photos in shutterbuds and post them
+              with <strong>#Shutterbuds</strong>.
+            </p>
+            <ul class="sb-steps">
+              {
+                jobSteps.map((step) => (
+                  <li>
+                    <svg class="sb-leaf" aria-hidden="true">
+                      <use href="#sb-leaf" />
+                    </svg>
+                    <span>{step}</span>
+                  </li>
+                ))
+              }
+            </ul>
+            <p class="sb-card-sign">2 weeks on the clock. go go go!</p>
           </div>
 
           <div class="sb-card-media">
             <div class="sb-circles">
-              <Image src={photo1} alt="In-game photo" width={360} class="sb-circle sb-c1" />
-              <Image src={photo2} alt="In-game photo" width={360} class="sb-circle sb-c2" />
-              <Image src={photo3} alt="In-game photo" width={360} class="sb-circle sb-c3" />
+              <Image
+                src={snap1}
+                alt="A snap of the stone statue through the viewfinder"
+                width={300}
+                class="sb-circle sb-c1"
+              />
+              <Image src={snap2} alt="A snap of a mossy cave" width={300} class="sb-circle sb-c2" />
+              <Image src={snap3} alt="A snap of the fire tower at night" width={300} class="sb-circle sb-c3" />
             </div>
             <p class="sb-hashtags">#RaceTo1000<br />#Shutterbuds</p>
           </div>
         </article>
 
         <!-- Team prize -->
-        <aside class="sb-side sb-side-right">
-          <Icon name="tabler:crown" class="sb-side-icon sb-crown" />
-          <div class="sb-ticket" aria-hidden="true">
+        <aside class="sb-side">
+          <Icon name="tabler:crown-filled" class="sb-side-icon sb-crown" />
+          <div class="sb-slot" aria-hidden="true">
             <Icon name="tabler:ticket" />
           </div>
-          <p class="sb-tag">Bonus</p>
           <h3 class="sb-side-title">#1 Team</h3>
-          <p class="sb-side-sub">gets a special prize</p>
+          <p class="sb-side-sub">gets special prize</p>
+          <p class="sb-side-note">most snaps takes it</p>
         </aside>
       </div>
     </main>
 
     <footer class="sb-footer">
-      <div class="sb-wrap">
-        <p>© {new Date().getFullYear()} Shutterbuds</p>
-      </div>
+      <p>© {new Date().getFullYear()} shutterbuds</p>
     </footer>
   </div>
 </Layout>
@@ -162,52 +201,60 @@ const metadata = {
 <style>
   .sb {
     --sb-cream: #f6eedd;
-    --sb-paper: #fffaf0;
+    --sb-paper: #fffcf4;
+    --sb-ink: #2b2118;
     --sb-brown: #5b3a22;
     --sb-brown-soft: #8a6446;
     --sb-forest: #2e5e2a;
     --sb-leaf: #5fae38;
     --sb-lime: #c9e04b;
-    --sb-red: #d8442f;
-    --sb-sky: #3bb0e3;
+    --sb-gold: #f2b632;
     --sb-display: 'Fredoka', 'Nunito', system-ui, sans-serif;
     --sb-body: 'Nunito', system-ui, sans-serif;
+    --sb-hand: 'Patrick Hand', 'Comic Sans MS', cursive;
+    /* slightly wobbly, hand-drawn corners */
+    --sb-wobble: 14px 6px 16px 5px / 5px 16px 6px 14px;
 
-    background: var(--sb-cream);
-    color: var(--sb-brown);
+    background: var(--sb-paper);
+    color: var(--sb-ink);
     font-family: var(--sb-body);
     letter-spacing: normal;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    overflow-x: hidden;
   }
   .sb-wrap {
     width: 100%;
-    max-width: 1200px;
+    max-width: 1180px;
     margin: 0 auto;
     padding: 0 16px;
+  }
+  .sb-leaf {
+    width: 1.15em;
+    height: 1.15em;
+    flex: none;
   }
 
   /* Header */
   .sb-header {
-    background: var(--sb-paper);
-    border-bottom: 3px solid var(--sb-brown);
+    border-bottom: 2px solid var(--sb-ink);
   }
   .sb-header-inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    padding-top: 6px;
-    padding-bottom: 6px;
+    padding-top: 8px;
+    padding-bottom: 8px;
   }
   .sb-logo-img {
-    height: 52px;
+    height: 50px;
     width: auto;
   }
   .sb-nav {
     display: flex;
-    gap: 4px;
+    gap: 6px;
     list-style: none;
     margin: 0;
     padding: 0;
@@ -215,74 +262,85 @@ const metadata = {
   .sb-nav-stub {
     font-family: var(--sb-display);
     font-weight: 600;
-    font-size: 1rem;
+    font-size: 1.05rem;
     color: var(--sb-brown);
     background: none;
     border: 0;
-    padding: 8px 12px;
-    border-radius: 999px;
+    border-bottom: 3px solid var(--sb-brown);
+    padding: 4px 4px 2px;
+    margin: 0 10px;
     cursor: default;
   }
-  .sb-nav-stub:hover {
-    background: var(--sb-cream);
-  }
 
-  /* Progress */
+  /* Snap counter */
   .sb-progress {
-    background: var(--sb-paper);
-    border-bottom: 3px solid var(--sb-brown);
-  }
-  .sb-progress-inner {
-    padding-top: 10px;
-    padding-bottom: 16px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
+    text-align: center;
+    padding: 10px 16px 14px;
+    border-bottom: 2px solid var(--sb-ink);
   }
   .sb-count {
     margin: 0;
-    font-family: var(--sb-display);
-    font-weight: 700;
-    font-size: 1.5rem;
-    display: flex;
-    align-items: baseline;
-    gap: 6px;
+    font-family: var(--sb-hand);
+    font-size: 1.9rem;
+    line-height: 1;
+    color: var(--sb-ink);
   }
   .sb-count-num {
     color: var(--sb-leaf);
   }
-  .sb-count-sep {
+  .sb-count-note {
+    margin: 4px 0 0;
+    font-family: var(--sb-hand);
+    font-size: 1rem;
     color: var(--sb-brown-soft);
   }
-  .sb-count-unit {
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--sb-brown-soft);
+  .sb-strip {
+    position: relative;
+    width: min(100%, 640px);
+    margin: 6px auto 0;
+    padding: 0 10px;
+  }
+  /* bracket end caps, like the mockup */
+  .sb-strip::before,
+  .sb-strip::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    bottom: -5px;
+    width: 10px;
+    border: 3px solid var(--sb-ink);
+    background: var(--sb-paper);
+  }
+  .sb-strip::before {
+    left: 0;
+    border-right: 0;
+  }
+  .sb-strip::after {
+    right: 0;
+    border-left: 0;
   }
   .sb-bar {
-    width: min(100%, 720px);
-    height: 22px;
-    background-color: var(--sb-cream);
-    background-image: radial-gradient(var(--sb-brown-soft) 1px, transparent 1.5px);
-    background-size: 18px 100%;
-    border: 3px solid var(--sb-brown);
-    border-radius: 999px;
+    height: 18px;
+    border: 3px solid var(--sb-ink);
+    background-color: #fff;
+    background-image: radial-gradient(var(--sb-ink) 1px, transparent 1.6px);
+    background-size: 22px 100%;
+    background-position: 11px 0;
     overflow: hidden;
-    box-shadow: 0 3px 0 var(--sb-brown);
   }
   .sb-bar-fill {
     height: 100%;
-    background: linear-gradient(90deg, var(--sb-leaf), var(--sb-lime));
-    border-radius: 999px;
+    background: var(--sb-lime);
+    border-right: 3px solid var(--sb-ink);
   }
 
   /* Hero */
   .sb-hero {
     position: relative;
-    height: clamp(280px, 52vw, 560px);
+    height: clamp(340px, 44vw, 540px);
     overflow: hidden;
-    border-bottom: 3px solid var(--sb-brown);
+    border-bottom: 2px solid var(--sb-ink);
+    background: #1d2a3a;
   }
   .sb-hero-img {
     position: absolute;
@@ -290,45 +348,102 @@ const metadata = {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center 35%;
+    object-position: center 70%;
   }
   .sb-hero-shade {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to bottom, rgba(20, 35, 15, 0) 45%, rgba(20, 35, 15, 0.65) 100%);
-  }
-  .sb-hero-copy {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: clamp(16px, 4vw, 40px);
-    text-align: center;
-    padding: 0 16px;
+    background: linear-gradient(to bottom, rgba(12, 18, 30, 0.45), rgba(12, 18, 30, 0) 40%);
   }
   .sb-hero-title {
+    position: absolute;
+    top: clamp(14px, 3vw, 34px);
+    left: 0;
+    right: 0;
     margin: 0;
+    text-align: center;
     font-family: var(--sb-display);
     font-weight: 700;
-    font-size: clamp(2.5rem, 8vw, 5.5rem);
+    font-size: clamp(2.4rem, 7vw, 5rem);
     line-height: 1;
     color: var(--sb-cream);
-    -webkit-text-stroke: 3px var(--sb-brown);
+    -webkit-text-stroke: 4px var(--sb-brown);
     paint-order: stroke fill;
     text-shadow: 0 5px 0 var(--sb-brown);
+    transform: rotate(-2deg);
   }
-  .sb-hero-sub {
-    margin: 12px 0 0;
+  .sb-mound {
+    position: absolute;
+    left: 50%;
+    bottom: -30%;
+    width: min(70%, 640px);
+    height: 48%;
+    transform: translateX(-50%);
+    background: #4f8a31;
+    border: 3px solid var(--sb-ink);
+    border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+    box-shadow: inset 0 10px 0 #6aa83f;
+  }
+  .sb-hero-stage {
+    position: absolute;
+    left: 50%;
+    bottom: 4%;
+    transform: translateX(-50%);
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .sb-polaroid {
+    margin: 0;
+    background: #fff;
+    padding: 8px 8px 4px;
+    border: 3px solid var(--sb-ink);
+    border-radius: 3px;
+    box-shadow: 4px 5px 0 rgba(0, 0, 0, 0.35);
+    transform: rotate(-4deg);
+  }
+  .sb-polaroid-img {
+    display: block;
+    width: clamp(120px, 17vw, 200px);
+    height: auto;
+    border: 2px solid var(--sb-ink);
+  }
+  .sb-polaroid figcaption {
+    font-family: var(--sb-hand);
+    font-size: clamp(0.85rem, 1.4vw, 1.05rem);
+    text-align: center;
+    color: var(--sb-ink);
+    padding-top: 2px;
+  }
+  .sb-crate {
+    margin-top: 6px;
+    width: clamp(64px, 8vw, 92px);
+    aspect-ratio: 1;
+    background:
+      linear-gradient(90deg, transparent 46%, rgba(0, 0, 0, 0.18) 46% 54%, transparent 54%),
+      repeating-linear-gradient(0deg, #a06a3c 0 14px, #8c5a30 14px 16px);
+    border: 4px solid var(--sb-ink);
+    border-radius: 4px;
+    box-shadow: 0 5px 0 rgba(0, 0, 0, 0.35);
+    display: grid;
+    place-items: center;
+    transform: rotate(3deg);
+  }
+  .sb-crate span {
     font-family: var(--sb-display);
-    font-weight: 600;
-    font-size: clamp(1rem, 2.4vw, 1.4rem);
-    color: #fff;
-    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+    font-weight: 700;
+    font-size: clamp(2.2rem, 4.5vw, 3.2rem);
+    line-height: 1;
+    color: var(--sb-cream);
+    -webkit-text-stroke: 3px var(--sb-ink);
+    paint-order: stroke fill;
   }
 
   /* Campaign */
   .sb-campaign {
-    padding-top: 40px;
-    padding-bottom: 56px;
+    padding-top: 36px;
+    padding-bottom: 64px;
     flex: 1;
   }
   .sb-campaign-head {
@@ -340,109 +455,168 @@ const metadata = {
     font-family: var(--sb-display);
     font-weight: 700;
     font-size: clamp(2rem, 5vw, 3rem);
+    line-height: 1.1;
     color: var(--sb-forest);
   }
   .sb-underline {
-    width: min(100%, 420px);
+    width: min(100%, 460px);
     height: 12px;
-    margin: 6px auto 0;
-    border: 3px solid var(--sb-brown);
-    border-radius: 999px;
+    margin: 8px auto 0;
+    border: 3px solid var(--sb-ink);
     background: var(--sb-lime);
+    border-radius: 2px 6px 3px 5px;
   }
   .sb-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 32px;
+    gap: 40px;
     align-items: start;
   }
   @media (min-width: 900px) {
     .sb-grid {
-      grid-template-columns: 1fr 2.2fr 1fr;
+      grid-template-columns: 1fr 2.3fr 1fr;
+      gap: 32px;
     }
   }
 
-  /* Sides */
+  /* Side columns */
   .sb-side {
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 8px;
   }
   .sb-side-icon {
-    width: 44px;
-    height: 44px;
-    margin-bottom: 12px;
+    width: 46px;
+    height: 46px;
+    margin-bottom: 10px;
   }
   .sb-star {
-    color: #f2b632;
+    color: var(--sb-gold);
+    filter: drop-shadow(0 2px 0 var(--sb-ink));
+    transform: rotate(-10deg);
   }
   .sb-crown {
-    color: #e0a526;
-  }
-  .sb-mystery,
-  .sb-ticket {
-    width: 150px;
-    height: 150px;
-    border: 4px solid var(--sb-brown);
-    border-radius: 24px;
-    box-shadow: 0 6px 0 var(--sb-brown);
-    display: grid;
-    place-items: center;
-  }
-  .sb-mystery {
-    background: repeating-linear-gradient(45deg, #6b4a2f 0 14px, #7a5638 14px 28px);
-    color: var(--sb-cream);
-    font-family: var(--sb-display);
-    font-weight: 700;
-    font-size: 6rem;
-    line-height: 1;
-    -webkit-text-stroke: 3px var(--sb-brown);
-    paint-order: stroke fill;
-  }
-  .sb-ticket {
-    background: var(--sb-leaf);
-    color: var(--sb-paper);
-    font-size: 5.5rem;
-    transform: rotate(-8deg);
-  }
-  .sb-tag {
-    margin: 22px 0 0;
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--sb-brown-soft);
+    color: var(--sb-gold);
+    filter: drop-shadow(0 2px 0 var(--sb-ink));
   }
   .sb-side-title {
-    margin: 4px 0 0;
+    margin: 18px 0 0;
     font-family: var(--sb-display);
     font-weight: 700;
-    font-size: 2.6rem;
+    font-size: 2.7rem;
     line-height: 1;
-    color: var(--sb-brown);
+    color: var(--sb-ink);
   }
   .sb-side-sub {
-    margin: 4px 0 0;
-    font-size: 1.1rem;
-    font-weight: 600;
+    margin: 2px 0 0;
+    font-family: var(--sb-hand);
+    font-size: 1.4rem;
+    line-height: 1.1;
+  }
+  .sb-side-note {
+    margin: 10px 0 0;
+    font-family: var(--sb-hand);
+    font-size: 1.05rem;
+    color: var(--sb-brown-soft);
   }
 
-  /* Main card */
+  /* Creature jar */
+  .sb-jar {
+    width: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .sb-jar-lid {
+    width: 118px;
+    height: 22px;
+    background: var(--sb-brown);
+    border: 3px solid var(--sb-ink);
+    border-radius: 6px 6px 3px 3px;
+    position: relative;
+    z-index: 1;
+  }
+  .sb-jar-body {
+    position: relative;
+    width: 150px;
+    height: 160px;
+    margin-top: -4px;
+    background: rgba(190, 228, 238, 0.55);
+    border: 4px solid var(--sb-ink);
+    border-radius: 26px 26px 34px 34px;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+  }
+  .sb-jar-body::after {
+    content: '';
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    width: 12px;
+    height: 70px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.85);
+  }
+  .sb-jar-blob {
+    position: absolute;
+    width: 86px;
+    height: 74px;
+    bottom: 18px;
+    background: #3b3f2c;
+    border-radius: 48% 52% 44% 56% / 58% 50% 50% 42%;
+    box-shadow:
+      -18px 6px 0 -6px #3b3f2c,
+      20px 10px 0 -8px #3b3f2c;
+  }
+  .sb-jar-q {
+    position: relative;
+    font-family: var(--sb-display);
+    font-weight: 700;
+    font-size: 5.5rem;
+    line-height: 1;
+    color: var(--sb-cream);
+    -webkit-text-stroke: 4px var(--sb-ink);
+    paint-order: stroke fill;
+    transform: rotate(-6deg) translateY(-6px);
+  }
+
+  /* Prize slot, styled like the in-game photo slots */
+  .sb-slot {
+    width: 150px;
+    height: 150px;
+    margin-top: 10px;
+    display: grid;
+    place-items: center;
+    background: var(--sb-leaf);
+    border: 7px solid #fff;
+    outline: 3px solid var(--sb-ink);
+    border-radius: 6px 12px 5px 10px;
+    box-shadow: 6px 6px 0 3px var(--sb-ink);
+    color: #fff;
+    font-size: 5.4rem;
+    transform: rotate(-6deg);
+  }
+  .sb-slot :global(svg) {
+    filter: drop-shadow(0 3px 0 var(--sb-ink));
+  }
+
+  /* Job notice card */
   .sb-card {
-    background: var(--sb-paper);
-    border: 4px solid var(--sb-brown);
-    border-radius: 20px;
-    box-shadow: 0 8px 0 var(--sb-brown);
-    padding: 28px;
+    position: relative;
+    background: #fff;
+    border: 4px solid var(--sb-ink);
+    border-radius: var(--sb-wobble);
+    box-shadow: 7px 7px 0 var(--sb-ink);
+    padding: 34px 28px 28px;
     display: grid;
     grid-template-columns: 1fr;
     gap: 24px;
   }
   @media (min-width: 640px) {
     .sb-card {
-      grid-template-columns: 1.4fr 1fr;
+      grid-template-columns: 1.45fr 1fr;
     }
   }
   @media (max-width: 899px) {
@@ -450,81 +624,114 @@ const metadata = {
       order: -1;
     }
   }
+  .sb-tape {
+    position: absolute;
+    top: -16px;
+    left: 50%;
+    width: 110px;
+    height: 30px;
+    background: rgba(214, 190, 140, 0.85);
+    border: 2px solid rgba(43, 33, 24, 0.35);
+    transform: translateX(-50%) rotate(-3deg);
+  }
+  .sb-card-kicker {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    font-family: var(--sb-hand);
+    font-size: 1.25rem;
+    color: var(--sb-forest);
+  }
   .sb-card-title {
-    margin: 0 0 12px;
+    margin: 2px 0 10px;
     font-family: var(--sb-display);
     font-weight: 700;
-    font-size: 1.45rem;
-    line-height: 1.2;
-    color: var(--sb-forest);
+    font-size: 2rem;
+    line-height: 1.1;
+    color: var(--sb-ink);
   }
   .sb-card-text p {
-    margin: 0 0 12px;
     line-height: 1.55;
+  }
+  .sb-card-text > p:not(.sb-card-kicker) {
+    margin: 0 0 14px;
   }
   .sb-steps {
-    margin: 0 0 14px;
-    padding-left: 1.3em;
-    list-style: decimal;
-    line-height: 1.55;
+    list-style: none;
+    margin: 0 0 16px;
+    padding: 0;
   }
   .sb-steps li {
-    margin-bottom: 6px;
-  }
-  .sb-steps li::marker {
-    font-family: var(--sb-display);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    margin-bottom: 10px;
     font-weight: 700;
-    color: var(--sb-leaf);
+    line-height: 1.4;
   }
-  .sb-card-note {
-    font-weight: 700;
+  .sb-steps .sb-leaf {
+    margin-top: 1px;
+  }
+  .sb-steps li:nth-child(even) .sb-leaf {
+    transform: rotate(18deg);
+  }
+  .sb-steps li:nth-child(odd) .sb-leaf {
+    transform: rotate(-12deg);
+  }
+  .sb-card-text > p.sb-card-sign {
+    margin: 0;
+    font-family: var(--sb-hand);
+    font-size: 1.35rem;
     color: var(--sb-forest);
+    transform: rotate(-1.5deg);
   }
   .sb-card-media {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 16px;
+    gap: 14px;
   }
   .sb-circles {
     position: relative;
-    width: 230px;
-    height: 220px;
+    width: 240px;
+    height: 230px;
   }
   .sb-circle {
     position: absolute;
     border-radius: 50%;
     object-fit: cover;
-    border: 4px solid var(--sb-brown);
-    background: var(--sb-cream);
+    border: 5px solid #fff;
+    outline: 3px solid var(--sb-ink);
+    box-shadow: 4px 4px 0 2px var(--sb-ink);
   }
   .sb-c1 {
-    width: 100px;
-    height: 100px;
+    width: 104px;
+    height: 104px;
     top: 0;
-    right: 30px;
+    right: 34px;
   }
   .sb-c2 {
-    width: 120px;
-    height: 120px;
-    bottom: 0;
+    width: 122px;
+    height: 122px;
+    bottom: 4px;
     left: 0;
   }
   .sb-c3 {
     width: 96px;
     height: 96px;
-    bottom: 12px;
+    bottom: 16px;
     right: 0;
   }
   .sb-hashtags {
     margin: 0;
     text-align: center;
-    font-family: var(--sb-display);
-    font-weight: 700;
-    font-size: 1.35rem;
-    line-height: 1.25;
-    color: var(--sb-leaf);
+    font-family: var(--sb-hand);
+    font-size: 1.6rem;
+    line-height: 1.1;
+    color: var(--sb-ink);
+    transform: rotate(-3deg);
   }
 
   /* Footer */
@@ -532,20 +739,27 @@ const metadata = {
     background: var(--sb-forest);
     color: var(--sb-cream);
     text-align: center;
-    padding: 18px 0;
-    font-size: 0.9rem;
+    padding: 16px;
+    font-family: var(--sb-hand);
+    font-size: 1.1rem;
   }
   .sb-footer p {
     margin: 0;
   }
 
-  @media (max-width: 520px) {
+  @media (max-width: 560px) {
     .sb-nav-stub {
-      padding: 6px 8px;
-      font-size: 0.85rem;
+      margin: 0 4px;
+      font-size: 0.95rem;
     }
     .sb-logo-img {
       height: 38px;
+    }
+    .sb-card {
+      padding: 30px 20px 22px;
+    }
+    .sb-mound {
+      width: 92%;
     }
   }
 </style>
