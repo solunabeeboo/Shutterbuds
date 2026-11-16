@@ -1,559 +1,551 @@
 ---
-import Layout from '~/layouts/PageLayout.astro';
+import Layout from '~/layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
 
-import Hero from '~/components/widgets/Hero.astro';
-import Note from '~/components/widgets/Note.astro';
-import Features from '~/components/widgets/Features.astro';
-import QuickStart from '~/components/widgets/QuickStart.astro';
-import Features2 from '~/components/widgets/Features2.astro';
-import Timeline from '~/components/widgets/Timeline.astro';
-import Steps from '~/components/widgets/Steps.astro';
-import Content from '~/components/widgets/Content.astro';
-import BlogHighlightedPosts from '~/components/widgets/BlogHighlightedPosts.astro';
-import FAQs from '~/components/widgets/FAQs.astro';
-import Stats from '~/components/widgets/Stats.astro';
-import CallToAction from '~/components/widgets/CallToAction.astro';
-import SocialProof from '~/components/widgets/SocialProof.astro';
-import StructuredData from '~/components/common/StructuredData.astro';
-import { SITE, METADATA, I18N } from 'astrowind:config';
-import favIconSvg from '~/assets/favicons/favicon.svg';
+import logo from '~/assets/images/shutterbuds/logo.png';
+import keyArt from '~/assets/images/shutterbuds/keyart.jpg';
+import photo1 from '~/assets/images/shutterbuds/photo1.jpg';
+import photo2 from '~/assets/images/shutterbuds/photo2.jpg';
+import photo3 from '~/assets/images/shutterbuds/photo3.jpg';
+
+// Update this number to move the progress bar.
+const SNAPS = 0;
+const GOAL = 1000;
+const pct = Math.min(100, Math.round((SNAPS / GOAL) * 100));
+
+// Nav items are placeholders: they render but go nowhere.
+const navItems = ['The Game', 'Photos', 'Community'];
 
 const metadata = {
-  title: 'AstroWind — Free template for creating websites with Astro + Tailwind CSS',
-  ignoreTitleTemplate: true,
+  title: 'Race to 1000',
 };
-
-// Structured data for the site and its publisher, built only from
-// `src/config.yaml` (`site.name`, `site.site`, `metadata.twitter.handle`), so
-// it is correct for any site made with the template. Blog posts add
-// BlogPosting on their own; the FAQs widget adds FAQPage.
-const organizationId = `${SITE?.site}/#organization`;
-const structuredData = [
-  {
-    '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    '@id': `${SITE?.site}/#website`,
-    name: SITE?.name,
-    url: SITE?.site,
-    inLanguage: I18N?.language,
-    publisher: { '@id': organizationId },
-  },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'Organization',
-    '@id': organizationId,
-    name: SITE?.name,
-    url: SITE?.site,
-    logo: new URL(favIconSvg.src, SITE?.site).toString(),
-    ...(METADATA?.twitter?.handle ? { sameAs: [`https://x.com/${METADATA.twitter.handle.replace(/^@/, '')}`] } : {}),
-  },
-];
 ---
 
 <Layout metadata={metadata}>
-  <StructuredData slot="head" schema={structuredData} />
-  <!-- Hero Widget ******************* -->
+  <Fragment slot="head">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </Fragment>
 
-  <Hero
-    tagline="Free & open source"
-    actions={[
-      {
-        variant: 'primary',
-        text: 'Get template',
-        href: 'https://github.com/arthelokyo/astrowind',
-        target: '_blank',
-        icon: 'tabler:download',
-      },
-      { text: 'Learn more', href: '#features' },
-    ]}
-    image={{ src: '~/assets/images/hero-image.png', alt: 'AstroWind Hero Image' }}
-  >
-    <Fragment slot="title">
-      Free template for <span class="hidden xl:inline">creating websites with</span>
-      <span class="text-accent dark:text-white"> Astro v7</span> + Tailwind CSS
-    </Fragment>
-
-    <Fragment slot="subtitle">
-      <span class="hidden sm:inline">
-        <span class="font-semibold">AstroWind</span> is a free, customizable and production-ready template for Astro v7 +
-        Tailwind CSS v4.</span
-      >
-      <span class="block mb-1 sm:hidden font-bold text-blue-600">AstroWind: Production-ready.</span>
-      Suitable for Startups, Small Business, SaaS websites, Professional Portfolios, Marketing websites, Landing Pages & Blogs.
-    </Fragment>
-  </Hero>
-
-  <!-- SocialProof Widget ************ -->
-
-  <SocialProof
-    id="proof"
-    classes={{ container: '!pb-14 md:!pb-20' }}
-    items={[
-      {
-        value: '#1',
-        label: 'most starred Astro theme',
-        icon: 'tabler:star-filled',
-        color: 'text-amber-400',
-        href: 'https://github.com/arthelokyo/astrowind',
-      },
-      { value: '100', label: 'Lighthouse score', icon: 'tabler:gauge', color: 'text-emerald-500' },
-      { value: 'MIT', label: 'licensed, free to use', icon: 'tabler:license', color: 'text-sky-500' },
-    ]}
-  />
-
-  <!-- QuickStart Widget ************* -->
-
-  <QuickStart
-    id="quick-start"
-    classes={{ icon: 'bg-green-600 dark:bg-green-700' }}
-    tagline="TL;DR"
-    title="One command. That is the whole setup."
-    subtitle="For the people who scroll past the features and ask “how do I run it?”. This is how."
-    commands={['npm create astro@latest -- --template arthelokyo/astrowind']}
-    items={[
-      {
-        title: 'Two minutes, one terminal',
-        description:
-          'Answer the prompts, run <code>npm run dev</code>, open localhost:4321. The demo site is now yours to edit. The only requirement is a current Node.js.',
-        icon: 'tabler:terminal-2',
-      },
-      {
-        title: 'AI-ready out of the box',
-        description:
-          'An <code>AGENTS.md</code> and step-by-step skills tell Claude Code, Cursor or any coding assistant how this template works. Ask it for a page; it knows where things go.',
-        icon: 'tabler:sparkles',
-      },
-      {
-        title: 'Free, MIT licensed, no strings',
-        description:
-          'Use it for client work, side projects or the company site. Star the repo if it saves you an afternoon.',
-        icon: 'tabler:license',
-      },
-    ]}
-  >
-    <Fragment slot="bg">
-      <div
-        class="absolute inset-0 bg-[radial-gradient(60%_55%_at_15%_20%,rgb(129_140_248/0.28),transparent_65%),radial-gradient(50%_50%_at_85%_25%,rgb(244_114_182/0.22),transparent_65%)] dark:bg-[radial-gradient(60%_55%_at_15%_20%,rgb(99_102_241/0.25),transparent_65%),radial-gradient(50%_50%_at_85%_25%,rgb(217_70_239/0.18),transparent_65%)]"
-      >
+  <div class="sb">
+    <!-- Header -->
+    <header class="sb-header">
+      <div class="sb-wrap sb-header-inner">
+        <span class="sb-logo" aria-label="Shutterbuds">
+          <Image src={logo} alt="Shutterbuds" width={400} class="sb-logo-img" loading="eager" />
+        </span>
+        <nav aria-label="Main">
+          <ul class="sb-nav">
+            {
+              navItems.map((item) => (
+                <li>
+                  <button type="button" class="sb-nav-stub" aria-disabled="true">
+                    {item}
+                  </button>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
       </div>
-    </Fragment>
-  </QuickStart>
+    </header>
 
-  <!-- Features Widget *************** -->
+    <!-- Progress -->
+    <section class="sb-progress" aria-label="Community goal progress">
+      <div class="sb-wrap sb-progress-inner">
+        <p class="sb-count">
+          <span class="sb-count-num">{SNAPS.toLocaleString()}</span>
+          <span class="sb-count-sep">/</span>
+          <span>{GOAL.toLocaleString()}</span>
+          <span class="sb-count-unit">photos</span>
+        </p>
+        <div
+          class="sb-bar"
+          role="progressbar"
+          aria-valuemin="0"
+          aria-valuemax={GOAL}
+          aria-valuenow={SNAPS}
+          aria-label="Photos posted"
+        >
+          <div class="sb-bar-fill" style={`width:${pct}%`}></div>
+        </div>
+      </div>
+    </section>
 
-  <Features
-    id="features"
-    tagline="Features"
-    title="What you get with AstroWind"
-    subtitle="One of the most professional and comprehensive templates currently on the market. Most starred & forked Astro theme in 2022, 2023, 2024 and 2025."
-    items={[
-      {
-        title: 'Astro + Tailwind CSS Integration',
-        description:
-          'A seamless integration between two great frameworks that offer high productivity, performance and versatility. Now powered by Tailwind CSS v4.',
-        icon: 'tabler:brand-tailwind',
-      },
-      {
-        title: 'Ready-to-use Components',
-        description:
-          'Widgets made with Tailwind CSS v4 ready to be used in Marketing Websites, SaaS, Blogs, Personal Profiles, Small Business...',
-        icon: 'tabler:components',
-      },
-      {
-        title: 'Best Practices',
-        description:
-          'Creating secure, efficient, and user-friendly websites that deliver exceptional experiences and lasting value.',
-        icon: 'tabler:list-check',
-      },
-      {
-        title: 'Excellent Page Speed',
-        description:
-          'Having a good page speed impacts organic search ranking, improves user experience (UI/UX) and increase conversion rates.',
-        icon: 'tabler:rocket',
-      },
-      {
-        title: 'Search Engine Optimization (SEO)',
-        description:
-          "SEO lies in its ability to enhance a website's visibility, driving organic traffic and enabling it to reach a wider audience.",
-        icon: 'tabler:arrows-right-left',
-      },
-      {
-        title: 'Open to new ideas and contributions',
-        description:
-          'Embracing a culture that is open to new ideas and contributions is integral fostering innovation, collaboration, and a dynamic user experience.',
-        icon: 'tabler:bulb',
-      },
-    ]}
-  />
+    <!-- Hero -->
+    <section class="sb-hero">
+      <Image
+        src={keyArt}
+        alt="A Shutterbud holding a camera on a forest path"
+        class="sb-hero-img"
+        widths={[640, 960, 1232]}
+        sizes="100vw"
+        loading="eager"
+      />
+      <div class="sb-hero-shade"></div>
+      <div class="sb-hero-copy">
+        <h1 class="sb-hero-title">Race to 1000!</h1>
+        <p class="sb-hero-sub">2 weeks · 1 goal · everybody wins</p>
+      </div>
+    </section>
 
-  <!-- Content Widget **************** -->
+    <!-- Campaign -->
+    <main class="sb-wrap sb-campaign">
+      <div class="sb-campaign-head">
+        <h2 class="sb-h2">Giveaway Campaign</h2>
+        <div class="sb-underline" aria-hidden="true"></div>
+      </div>
 
-  <Content
-    isReversed
-    tagline="Inside template"
-    title="AstroWind's Blueprint: Fun Meets Functionality!"
-    items={[
-      {
-        title: 'Built on top of Astro v7',
-        description:
-          'Benefiting from the performance and developer-friendly features of this modern static site generator.',
-      },
-      {
-        title: 'Styled using Tailwind CSS v4',
-        description:
-          'Facilitating rapid design and consistent styling with this highly popular utility-first CSS framework.',
-      },
-      {
-        title: 'Cross-browser compatibility',
-        description:
-          'Ensure your website looks and functions consistently across various web browsers, delivering a seamless experience to all users.',
-      },
-    ]}
-    image={{
-      src: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-      alt: 'Colorful Image',
-    }}
-  >
-    <Fragment slot="content">
-      <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">Building on modern foundations</h3>
-      Gain a competitive advantage by incorporating industry leading practices
-    </Fragment>
+      <div class="sb-grid">
+        <!-- Unlock prize -->
+        <aside class="sb-side sb-side-left">
+          <Icon name="tabler:star-filled" class="sb-side-icon sb-star" />
+          <div class="sb-mystery" aria-hidden="true">?</div>
+          <p class="sb-tag">Unlocks at 1000</p>
+          <h3 class="sb-side-title">Release</h3>
+          <p class="sb-side-sub">a new creature</p>
+        </aside>
 
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
-    </Fragment>
-  </Content>
+        <!-- Main card -->
+        <article class="sb-card">
+          <div class="sb-card-text">
+            <h3 class="sb-card-title">Snap. Post. Unlock.</h3>
+            <p>
+              For two weeks, take photos in Shutterbuds and post them with <strong>#Shutterbuds</strong>. Every photo
+              counts toward one shared goal.
+            </p>
+            <ol class="sb-steps">
+              <li>Snap a photo in-game.</li>
+              <li>Post it with <strong>#Shutterbuds</strong> and <strong>#RaceTo1000</strong>.</li>
+              <li>Help the community hit 1000 photos in 2 weeks.</li>
+              <li>Hit the goal and the prize unlocks for everyone who entered.</li>
+            </ol>
+            <p class="sb-card-note">Bring your buds. Every friend who posts gets us all closer.</p>
+          </div>
 
-  <!-- Content Widget **************** -->
+          <div class="sb-card-media">
+            <div class="sb-circles">
+              <Image src={photo1} alt="In-game photo" width={360} class="sb-circle sb-c1" />
+              <Image src={photo2} alt="In-game photo" width={360} class="sb-circle sb-c2" />
+              <Image src={photo3} alt="In-game photo" width={360} class="sb-circle sb-c3" />
+            </div>
+            <p class="sb-hashtags">#RaceTo1000<br />#Shutterbuds</p>
+          </div>
+        </article>
 
-  <Content
-    isAfterContent
-    items={[
-      {
-        title: 'High level of customization',
-        description: `Tailor the template effortlessly to match your brand's identity and requirements, making your website distinct and saving you time.`,
-      },
-      {
-        title: 'Multiple layout possibilities',
-        description:
-          'Explore various layout options to find the structure that best presents your content, enhancing user engagement and navigation.',
-      },
-      {
-        title: 'Fully responsive design',
-        description:
-          "Ensure your website's optimal performance on various devices and screen sizes, providing a consistent and enjoyable user experience.",
-      },
-      {
-        title: 'Integration of media',
-        description:
-          'Seamlessly incorporate images, videos, and multimedia elements that enhance your content and engage visitors effectively.',
-      },
-    ]}
-    image={{
-      src: 'https://images.unsplash.com/photo-1616674282942-2835e62d612e?auto=format&fit=crop&w=1600&q=80',
-      alt: 'Printed website wireframes on a black table',
-    }}
-  >
-    <Fragment slot="content">Ensure your online presence truly represents you.</Fragment>
+        <!-- Team prize -->
+        <aside class="sb-side sb-side-right">
+          <Icon name="tabler:crown" class="sb-side-icon sb-crown" />
+          <div class="sb-ticket" aria-hidden="true">
+            <Icon name="tabler:ticket" />
+          </div>
+          <p class="sb-tag">Bonus</p>
+          <h3 class="sb-side-title">#1 Team</h3>
+          <p class="sb-side-sub">gets a special prize</p>
+        </aside>
+      </div>
+    </main>
 
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
-    </Fragment>
-  </Content>
-
-  <!-- Content Widget **************** -->
-
-  <Content
-    isReversed
-    isAfterContent
-    items={[
-      {
-        title: 'Enhanced user engagement',
-        description:
-          'Captivate your audience with interactive elements, intuitive navigation, and visually appealing layouts, encouraging longer visits.',
-      },
-      {
-        title: 'Continuous improvement',
-        description:
-          'Ensure your website stays aligned with the latest trends and technologies through regular updates and enhancements.',
-      },
-      {
-        title: 'Time and resource efficiency',
-        description:
-          'Skip the time-consuming process of building a website from scratch and launch your online presence sooner with AstroWind.',
-      },
-      {
-        title: 'Community support',
-        description: `Join the growing AstroWind community for insights, resources, and assistance, ensuring you're never alone on your web development journey.`,
-      },
-    ]}
-    image={{
-      src: 'https://images.unsplash.com/photo-1611462985358-60d3498e0364?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
-      alt: 'Astronauts Image',
-    }}
-  >
-    <Fragment slot="content">Designed to foster growth and success.</Fragment>
-
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
-    </Fragment>
-  </Content>
-
-  <!-- Steps Widget ****************** -->
-
-  <Steps
-    title="Get your dream website up and running in no time with AstroWind."
-    items={[
-      {
-        title: 'Step 1: <span class="font-medium">Download</span>',
-        description:
-          "Kickstart with GitHub! Either fork the AstroWind template or simply click 'Use this template'. Your canvas awaits, ready for your digital masterpiece. In just a few clicks, you've already set the foundation.",
-        icon: 'tabler:package',
-      },
-      {
-        title: 'Step 2: <span class="font-medium">Add content</span>',
-        description:
-          "Pour your vision into it. Add images, text, and all that jazz to breathe life into your digital space. Remember, it's the content that tells your story, so make it captivating.",
-        icon: 'tabler:letter-case',
-      },
-      {
-        title: 'Step 3: <span class="font-medium">Customize styles</span>',
-        description:
-          'Give it your personal touch. Tailor colors, fonts, and layouts until it feels just right. Your unique flair, amplified by AstroWind! Precision in design ensures a seamless user experience.',
-        icon: 'tabler:paint',
-      },
-      {
-        title: 'Ready!',
-        icon: 'tabler:check',
-      },
-    ]}
-    image={{
-      src: 'https://images.unsplash.com/photo-1616198814651-e71f960c3180?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=987&q=80',
-      alt: 'Steps image',
-    }}
-  />
-
-  <!-- Features2 Widget ************** -->
-
-  <Features2
-    title="Most used widgets"
-    subtitle="Provides frequently used components for building websites using Tailwind CSS v4"
-    tagline="Components"
-    items={[
-      {
-        title: 'Headers',
-        description: "Ever tried driving without GPS? Boom! That's why websites need headers for direction.",
-        icon: 'flat-color-icons:template',
-      },
-      {
-        title: 'Heros',
-        description:
-          "Picture a superhero landing – epic, right? That's the job of a Hero section, making grand entrances!",
-        icon: 'flat-color-icons:gallery',
-      },
-      {
-        title: 'Features',
-        description:
-          'Where websites strut their stuff and show off superpowers. No holding back on the bragging rights here!',
-        icon: 'flat-color-icons:approval',
-      },
-      {
-        title: 'Content',
-        description:
-          "Dive into the meat and potatoes of a site; without it, you'd just be window shopping. Content is king.",
-        icon: 'flat-color-icons:document',
-      },
-      {
-        title: 'Call-to-Action',
-        description:
-          'That enthusiastic friend who\'s always urging, "Do it! Do it!"? Yeah, that\'s this button nudging you towards adventure.',
-        icon: 'flat-color-icons:advertising',
-      },
-      {
-        title: 'Pricing',
-        description: 'Behold the dessert menu of the website world. Tempting choices await, can you resist?',
-        icon: 'flat-color-icons:currency-exchange',
-      },
-      {
-        title: 'Testimonial',
-        description: 'Step into the gossip corner! Here, other visitors spill the beans and share the juicy details.',
-        icon: 'flat-color-icons:voice-presentation',
-      },
-      {
-        title: 'Contact',
-        description:
-          'Like a digital mailbox, but faster! Drop a line, ask a question, or send a virtual high-five. Ding! Message in.',
-        icon: 'flat-color-icons:business-contact',
-      },
-      {
-        title: 'Footers',
-        description: "The footer's like the credits of a movie but sprinkled with easter eggs. Time to hunt!",
-        icon: 'flat-color-icons:database',
-      },
-    ]}
-  >
-    <Fragment slot="bg">
-      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
-    </Fragment>
-  </Features2>
-
-  <!-- Timeline Widget **************** -->
-
-  <Timeline
-    id="story"
-    layout="alternate"
-    tagline="Our story"
-    title="One template, since 2022"
-    subtitle="Started before Astro 1.0 shipped, shaped by every Astro release since, and by the people who kept sending pull requests."
-    items={[
-      {
-        date: 'June 2022',
-        title: 'A template for a framework still in beta',
-        description:
-          'AstroWind starts on Astro 1.0 beta with a handful of pages, a few widgets and one idea: a website can be fast, simple and good-looking at the same time.',
-        icon: 'tabler:rocket',
-      },
-      {
-        date: '2022',
-        title: 'The most starred Astro theme, in its first year',
-        description:
-          'By December it is the most starred theme in the Astro ecosystem, a place it would hold year after year. The first pull requests from strangers arrive, and they keep coming.',
-        icon: 'tabler:star-filled',
-      },
-      {
-        date: '2022–2023',
-        title: 'The busiest stretch',
-        description:
-          'Astro grows fast and the template grows with it: collections for content, better images, page transitions. The blog matures, the widgets double, the road to 1.0 begins, and more people than ever send pull requests.',
-        icon: 'tabler:users-group',
-      },
-      {
-        date: '2024',
-        title: 'Polish',
-        description:
-          'Astro 4, and a year of small, careful improvements, most of them sent in by contributors: accessibility, tooling, ways to edit and ways to deploy. Three thousand stars by September.',
-        icon: 'tabler:puzzle',
-      },
-      {
-        date: '2025',
-        title: 'Steady, and quieter',
-        description:
-          'Astro 5 and regular updates. Fewer commits, nothing broken, and the stars kept coming: five thousand by October.',
-        icon: 'tabler:refresh',
-      },
-      {
-        date: '2026',
-        title: 'Astro 7 and Tailwind CSS 4',
-        description:
-          'Two framework majors in one year. The template gets a new generation of widgets, complete landing pages, a blog that finally reads like documentation, and a guide so coding assistants know their way around.',
-        icon: 'tabler:sparkles',
-      },
-      {
-        date: '2026',
-        title: 'Release v1',
-        description:
-          'Four years after the first commit, the demo has no placeholders left: every page, every landing page and every post is real, and the template is ready for whatever comes next.',
-        icon: 'tabler:circle-check-filled',
-        highlight: true,
-      },
-      { icon: 'tabler:dots', ghost: true },
-    ]}
-  />
-
-  <!-- Note Widget ******************* -->
-
-  <Note title="Philosophy:" description="Simplicity, Best Practices and High Performance" />
-
-  <!-- HighlightedPosts Widget ******* -->
-
-  <BlogHighlightedPosts
-    title="Find out more content in our Blog"
-    postIds={[
-      'get-started-website-with-astro-tailwind-css',
-      'how-to-customize-astrowind-to-your-brand',
-      'useful-resources-to-create-websites',
-      'landing',
-    ]}
-    information={`The blog is used to display AstroWind documentation.
-                        Each new article will be an important step that you will need to know to be an expert in creating a website using Astro v7 + Tailwind CSS v4.
-                        Astro is a very interesting technology. Thanks.
-                `}
-  />
-
-  <!-- FAQs Widget ******************* -->
-
-  <FAQs
-    id="faqs"
-    title="Frequently Asked Questions"
-    subtitle="The questions people ask before they clone the repository, answered briefly. For step-by-step tasks, the repository ships skills your AI coding assistant can follow."
-    tagline="FAQs"
-    schema
-    items={[
-      {
-        title: 'What is AstroWind?',
-        description:
-          'A free, open-source template for Astro and Tailwind CSS: a static site with a header, footer, twenty-plus reusable widgets, a Markdown/MDX blog, dark mode, RTL support, image optimisation, SEO metadata and an RSS feed, ready to be customised and deployed anywhere static files are served.',
-      },
-      {
-        title: 'What do I need to start?',
-        description:
-          'A current Node.js (the exact minimum is in <code>package.json</code>) and a terminal. Run <code>npm create astro@latest -- --template arthelokyo/astrowind</code>, then <code>npm run dev</code>. Site name, URL, metadata and blog options live in <code>src/config.yaml</code>; colours and fonts in <code>src/components/CustomStyles.astro</code>.',
-      },
-      {
-        title: 'Can I use it for a site without a blog?',
-        description:
-          'Yes. Set <code>apps.blog.isEnabled: false</code> in <code>src/config.yaml</code> and the blog routes, the RSS feed and the post widgets disappear from the build. The rest of the template is unaffected.',
-      },
-      {
-        title: 'How do I change colours, fonts and the logo?',
-        description:
-          'Colours are CSS variables in <code>src/components/CustomStyles.astro</code> (light and dark), fonts are configured in <code>astro.config.ts</code> through Astro’s Fonts API, and the logo is <code>src/components/Logo.astro</code>. The same variables also feed the shadcn/ui-compatible tokens, so shadcn-style components pick up your theme.',
-      },
-      {
-        title: 'Does it work with an AI coding assistant?',
-        description:
-          'It is built for it. The repository includes <code>AGENTS.md</code> with the project conventions and a <code>.agents/skills/</code> folder with step-by-step guides for common tasks (disable the blog, set an Open Graph image, deploy under a base path, connect a CMS, deploy to Cloudflare…), so tools like Claude Code, Codex or Cursor can do them reliably.',
-      },
-      {
-        title: 'Where can I deploy it and what does it cost?',
-        description:
-          'Anywhere that serves static files: Vercel, Netlify, Cloudflare, GitHub Pages, an nginx container (a Dockerfile is included) or your own server. The template is MIT licensed and free for personal and commercial projects.',
-      },
-    ]}
-  />
-
-  <!-- Stats Widget ****************** -->
-
-  <Stats
-    id="stats"
-    countUp
-    stats={[
-      { title: 'GitHub stars', amount: '6K' },
-      { title: 'Forks', amount: '1.7K' },
-      { title: 'Ready-made widgets', amount: '34' },
-      { title: 'Lighthouse score', amount: '100' },
-    ]}
-  />
-
-  <!-- CallToAction Widget *********** -->
-
-  <CallToAction
-    actions={[
-      {
-        variant: 'primary',
-        text: 'Get template',
-        href: 'https://github.com/arthelokyo/astrowind',
-        target: '_blank',
-        icon: 'tabler:download',
-      },
-    ]}
-  >
-    <Fragment slot="title">
-      Astro&nbsp;+&nbsp;<br class="block sm:hidden" /><span class="sm:whitespace-nowrap">Tailwind CSS</span>
-    </Fragment>
-
-    <Fragment slot="subtitle">
-      Free, open source and production-ready. <br class="hidden md:inline" />Clone it, replace the content and deploy.
-    </Fragment>
-  </CallToAction>
+    <footer class="sb-footer">
+      <div class="sb-wrap">
+        <p>© {new Date().getFullYear()} Shutterbuds</p>
+      </div>
+    </footer>
+  </div>
 </Layout>
+
+<style>
+  .sb {
+    --sb-cream: #f6eedd;
+    --sb-paper: #fffaf0;
+    --sb-brown: #5b3a22;
+    --sb-brown-soft: #8a6446;
+    --sb-forest: #2e5e2a;
+    --sb-leaf: #5fae38;
+    --sb-lime: #c9e04b;
+    --sb-red: #d8442f;
+    --sb-sky: #3bb0e3;
+    --sb-display: 'Fredoka', 'Nunito', system-ui, sans-serif;
+    --sb-body: 'Nunito', system-ui, sans-serif;
+
+    background: var(--sb-cream);
+    color: var(--sb-brown);
+    font-family: var(--sb-body);
+    letter-spacing: normal;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  .sb-wrap {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+
+  /* Header */
+  .sb-header {
+    background: var(--sb-paper);
+    border-bottom: 3px solid var(--sb-brown);
+  }
+  .sb-header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
+  .sb-logo-img {
+    height: 52px;
+    width: auto;
+  }
+  .sb-nav {
+    display: flex;
+    gap: 4px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .sb-nav-stub {
+    font-family: var(--sb-display);
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--sb-brown);
+    background: none;
+    border: 0;
+    padding: 8px 12px;
+    border-radius: 999px;
+    cursor: default;
+  }
+  .sb-nav-stub:hover {
+    background: var(--sb-cream);
+  }
+
+  /* Progress */
+  .sb-progress {
+    background: var(--sb-paper);
+    border-bottom: 3px solid var(--sb-brown);
+  }
+  .sb-progress-inner {
+    padding-top: 10px;
+    padding-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .sb-count {
+    margin: 0;
+    font-family: var(--sb-display);
+    font-weight: 700;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+  .sb-count-num {
+    color: var(--sb-leaf);
+  }
+  .sb-count-sep {
+    color: var(--sb-brown-soft);
+  }
+  .sb-count-unit {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--sb-brown-soft);
+  }
+  .sb-bar {
+    width: min(100%, 720px);
+    height: 22px;
+    background-color: var(--sb-cream);
+    background-image: radial-gradient(var(--sb-brown-soft) 1px, transparent 1.5px);
+    background-size: 18px 100%;
+    border: 3px solid var(--sb-brown);
+    border-radius: 999px;
+    overflow: hidden;
+    box-shadow: 0 3px 0 var(--sb-brown);
+  }
+  .sb-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--sb-leaf), var(--sb-lime));
+    border-radius: 999px;
+  }
+
+  /* Hero */
+  .sb-hero {
+    position: relative;
+    height: clamp(280px, 52vw, 560px);
+    overflow: hidden;
+    border-bottom: 3px solid var(--sb-brown);
+  }
+  .sb-hero-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 35%;
+  }
+  .sb-hero-shade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(20, 35, 15, 0) 45%, rgba(20, 35, 15, 0.65) 100%);
+  }
+  .sb-hero-copy {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: clamp(16px, 4vw, 40px);
+    text-align: center;
+    padding: 0 16px;
+  }
+  .sb-hero-title {
+    margin: 0;
+    font-family: var(--sb-display);
+    font-weight: 700;
+    font-size: clamp(2.5rem, 8vw, 5.5rem);
+    line-height: 1;
+    color: var(--sb-cream);
+    -webkit-text-stroke: 3px var(--sb-brown);
+    paint-order: stroke fill;
+    text-shadow: 0 5px 0 var(--sb-brown);
+  }
+  .sb-hero-sub {
+    margin: 12px 0 0;
+    font-family: var(--sb-display);
+    font-weight: 600;
+    font-size: clamp(1rem, 2.4vw, 1.4rem);
+    color: #fff;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  }
+
+  /* Campaign */
+  .sb-campaign {
+    padding-top: 40px;
+    padding-bottom: 56px;
+    flex: 1;
+  }
+  .sb-campaign-head {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .sb-h2 {
+    margin: 0;
+    font-family: var(--sb-display);
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 3rem);
+    color: var(--sb-forest);
+  }
+  .sb-underline {
+    width: min(100%, 420px);
+    height: 12px;
+    margin: 6px auto 0;
+    border: 3px solid var(--sb-brown);
+    border-radius: 999px;
+    background: var(--sb-lime);
+  }
+  .sb-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+  @media (min-width: 900px) {
+    .sb-grid {
+      grid-template-columns: 1fr 2.2fr 1fr;
+    }
+  }
+
+  /* Sides */
+  .sb-side {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 8px;
+  }
+  .sb-side-icon {
+    width: 44px;
+    height: 44px;
+    margin-bottom: 12px;
+  }
+  .sb-star {
+    color: #f2b632;
+  }
+  .sb-crown {
+    color: #e0a526;
+  }
+  .sb-mystery,
+  .sb-ticket {
+    width: 150px;
+    height: 150px;
+    border: 4px solid var(--sb-brown);
+    border-radius: 24px;
+    box-shadow: 0 6px 0 var(--sb-brown);
+    display: grid;
+    place-items: center;
+  }
+  .sb-mystery {
+    background: repeating-linear-gradient(45deg, #6b4a2f 0 14px, #7a5638 14px 28px);
+    color: var(--sb-cream);
+    font-family: var(--sb-display);
+    font-weight: 700;
+    font-size: 6rem;
+    line-height: 1;
+    -webkit-text-stroke: 3px var(--sb-brown);
+    paint-order: stroke fill;
+  }
+  .sb-ticket {
+    background: var(--sb-leaf);
+    color: var(--sb-paper);
+    font-size: 5.5rem;
+    transform: rotate(-8deg);
+  }
+  .sb-tag {
+    margin: 22px 0 0;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--sb-brown-soft);
+  }
+  .sb-side-title {
+    margin: 4px 0 0;
+    font-family: var(--sb-display);
+    font-weight: 700;
+    font-size: 2.6rem;
+    line-height: 1;
+    color: var(--sb-brown);
+  }
+  .sb-side-sub {
+    margin: 4px 0 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  /* Main card */
+  .sb-card {
+    background: var(--sb-paper);
+    border: 4px solid var(--sb-brown);
+    border-radius: 20px;
+    box-shadow: 0 8px 0 var(--sb-brown);
+    padding: 28px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  @media (min-width: 640px) {
+    .sb-card {
+      grid-template-columns: 1.4fr 1fr;
+    }
+  }
+  @media (max-width: 899px) {
+    .sb-card {
+      order: -1;
+    }
+  }
+  .sb-card-title {
+    margin: 0 0 12px;
+    font-family: var(--sb-display);
+    font-weight: 700;
+    font-size: 1.45rem;
+    line-height: 1.2;
+    color: var(--sb-forest);
+  }
+  .sb-card-text p {
+    margin: 0 0 12px;
+    line-height: 1.55;
+  }
+  .sb-steps {
+    margin: 0 0 14px;
+    padding-left: 1.3em;
+    list-style: decimal;
+    line-height: 1.55;
+  }
+  .sb-steps li {
+    margin-bottom: 6px;
+  }
+  .sb-steps li::marker {
+    font-family: var(--sb-display);
+    font-weight: 700;
+    color: var(--sb-leaf);
+  }
+  .sb-card-note {
+    font-weight: 700;
+    color: var(--sb-forest);
+  }
+  .sb-card-media {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+  }
+  .sb-circles {
+    position: relative;
+    width: 230px;
+    height: 220px;
+  }
+  .sb-circle {
+    position: absolute;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--sb-brown);
+    background: var(--sb-cream);
+  }
+  .sb-c1 {
+    width: 100px;
+    height: 100px;
+    top: 0;
+    right: 30px;
+  }
+  .sb-c2 {
+    width: 120px;
+    height: 120px;
+    bottom: 0;
+    left: 0;
+  }
+  .sb-c3 {
+    width: 96px;
+    height: 96px;
+    bottom: 12px;
+    right: 0;
+  }
+  .sb-hashtags {
+    margin: 0;
+    text-align: center;
+    font-family: var(--sb-display);
+    font-weight: 700;
+    font-size: 1.35rem;
+    line-height: 1.25;
+    color: var(--sb-leaf);
+  }
+
+  /* Footer */
+  .sb-footer {
+    background: var(--sb-forest);
+    color: var(--sb-cream);
+    text-align: center;
+    padding: 18px 0;
+    font-size: 0.9rem;
+  }
+  .sb-footer p {
+    margin: 0;
+  }
+
+  @media (max-width: 520px) {
+    .sb-nav-stub {
+      padding: 6px 8px;
+      font-size: 0.85rem;
+    }
+    .sb-logo-img {
+      height: 38px;
+    }
+  }
+</style>
