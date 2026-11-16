@@ -120,6 +120,7 @@ const metadata = { title: 'Race to 1000!' };
     <section class="sb-progress" aria-label="Posts so far">
       <p class="sb-count">
         <span class="sb-count-num">{POSTS}</span> / {GOAL}
+        <span class="sb-count-unit">captures</span>
       </p>
       <div class="sb-strip">
         <div
@@ -128,12 +129,11 @@ const metadata = { title: 'Race to 1000!' };
           aria-valuemin="0"
           aria-valuemax={GOAL}
           aria-valuenow={POSTS}
-          aria-label="Photos and clips posted"
+          aria-label="Captures posted"
         >
           <div class="sb-bar-fill" style={`width:${pct}%`}></div>
         </div>
       </div>
-      <p class="sb-count-note">photos & clips posted</p>
     </section>
 
     <!-- Banner -->
@@ -320,8 +320,8 @@ const metadata = { title: 'Race to 1000!' };
     padding: 0 16px;
   }
   .sb-wide {
-    max-width: 1640px;
-    padding: 0 24px;
+    max-width: none;
+    padding: 0 16px;
   }
   .sb-leaf {
     width: 1.15em;
@@ -380,10 +380,9 @@ const metadata = { title: 'Race to 1000!' };
   .sb-count-num {
     color: var(--sb-leaf);
   }
-  .sb-count-note {
-    margin: 4px 0 0;
-    font-family: var(--sb-hand);
-    font-size: 1rem;
+  .sb-count-unit {
+    font-size: 1.3rem;
+    margin-left: 6px;
     color: var(--sb-brown-soft);
   }
   .sb-strip {
@@ -485,8 +484,14 @@ const metadata = { title: 'Race to 1000!' };
   }
   @media (min-width: 1000px) {
     .sb-grid {
-      grid-template-columns: 190px minmax(0, 1fr) 190px;
-      gap: 36px;
+      /* side columns fill the gutters, so their content sits centered
+         between the screen edge and the card */
+      grid-template-columns: minmax(230px, 1fr) minmax(0, 1260px) minmax(230px, 1fr);
+      gap: 0;
+    }
+    .sb-wide {
+      padding-left: 0;
+      padding-right: 0;
     }
     .sb-side {
       position: sticky;
