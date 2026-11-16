@@ -196,8 +196,6 @@ const metadata = { title: 'Race to 1000!' };
 
         <!-- Job notice + rules -->
         <article class="sb-card">
-          <div class="sb-tape" aria-hidden="true"></div>
-
           <div class="sb-card-top">
             <div class="sb-card-text">
               <p class="sb-card-kicker">
@@ -486,7 +484,7 @@ const metadata = { title: 'Race to 1000!' };
     .sb-grid {
       /* side columns fill the gutters, so their content sits centered
          between the screen edge and the card */
-      grid-template-columns: minmax(230px, 1fr) minmax(0, 1260px) minmax(230px, 1fr);
+      grid-template-columns: minmax(260px, 1fr) minmax(0, 1120px) minmax(260px, 1fr);
       gap: 0;
     }
     .sb-wide {
@@ -572,7 +570,7 @@ const metadata = { title: 'Race to 1000!' };
     border: 4px solid var(--sb-ink);
     border-radius: var(--sb-wobble);
     box-shadow: 7px 7px 0 var(--sb-ink);
-    padding: 38px clamp(20px, 3vw, 44px) 32px;
+    padding: 32px clamp(20px, 3vw, 44px) 32px;
   }
   @media (max-width: 999px) {
     .sb-card {
@@ -589,16 +587,6 @@ const metadata = { title: 'Race to 1000!' };
       grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
       align-items: center;
     }
-  }
-  .sb-tape {
-    position: absolute;
-    top: -16px;
-    left: 50%;
-    width: 120px;
-    height: 30px;
-    background: rgba(214, 190, 140, 0.85);
-    border: 2px solid rgba(34, 25, 15, 0.35);
-    transform: translateX(-50%) rotate(-3deg);
   }
   .sb-card-kicker {
     display: flex;
