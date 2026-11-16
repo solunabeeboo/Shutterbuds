@@ -3,26 +3,67 @@ import Layout from '~/layouts/Layout.astro';
 import { Image } from 'astro:assets';
 import { Icon } from 'astro-icon/components';
 
+import HeroScene from '~/components/shutterbuds/HeroScene.astro';
 import logo from '~/assets/images/shutterbuds/logo.png';
-import heroBg from '~/assets/images/shutterbuds/hero-bg.jpg';
-import buds from '~/assets/images/shutterbuds/buds.png';
-import snap1 from '~/assets/images/shutterbuds/snap1.jpg';
-import snap2 from '~/assets/images/shutterbuds/snap2.jpg';
-import snap3 from '~/assets/images/shutterbuds/snap3.jpg';
 
 // Update this number to move the progress bar.
-const SNAPS = 0;
+const POSTS = 0;
 const GOAL = 1000;
-const pct = Math.min(100, (SNAPS / GOAL) * 100);
+const pct = Math.min(100, (POSTS / GOAL) * 100);
 
-// Nav items are placeholders: they render but go nowhere.
+// Nav items and social icons are placeholders: they render but go nowhere.
 const navItems = ['the game', 'snaps', 'buds'];
+const socials = [
+  { name: 'Instagram', icon: 'tabler:brand-instagram', cls: 'sb-ig' },
+  { name: 'TikTok', icon: 'tabler:brand-tiktok', cls: 'sb-tt' },
+  { name: 'YouTube', icon: 'tabler:brand-youtube-filled', cls: 'sb-yt' },
+];
 
 const jobSteps = [
-  'Snap anything. Statues, caves, your buds mid-trip.',
-  'Post it with #Shutterbuds',
-  'Drag your buds into it too',
-  'Hit 1000 and everyone who posted gets the prize!',
+  'Grab your buds and find a Hufu.',
+  'Wrangle it. Ride it. Get the shot (or the clip).',
+  'Post it with #Shutterbuds and #RaceTo1000',
+  'Hit 1000 posts in 2 weeks and a new SPECIAL creature joins the game!',
+];
+
+// DRAFT rules. Fill in every [bracket] and have someone qualified review before launch.
+const rules = [
+  {
+    title: 'No purchase necessary',
+    body: 'Entry is free. Buying anything will not help you win. shutterbuds is free to play, so all you need is the game.',
+  },
+  {
+    title: 'Who can enter',
+    body: 'Open to players who are [minimum age] or older and live in [eligible countries/regions]. Employees of [studio name] and their households can post for fun but cannot win the team prize.',
+  },
+  {
+    title: 'Entry period',
+    body: 'The Race to 1000 runs for 14 days, from [start date, time, time zone] to [end date, time, time zone]. Posts made outside this window do not count.',
+  },
+  {
+    title: 'How to enter',
+    body: 'Post an original photo or video taken in shutterbuds that shows a player wrangling or riding a Hufu creature. Post it publicly on Instagram, TikTok or YouTube with #Shutterbuds and #RaceTo1000. Your account must be public so we can count it.',
+  },
+  {
+    title: 'The community goal',
+    body: 'If at least 1000 eligible posts go up during the entry period, [studio name] will add a new special creature to shutterbuds for all players. Release date: [TBD].',
+  },
+  {
+    title: 'Top team prize',
+    body: 'The [number] teams or contributors with the most eligible posts each get [number] free crochet kits, shipped at no cost to [eligible regions]. Winners are contacted by DM within [X] days of the end date and must reply within [X] days or a new winner is picked.',
+  },
+  {
+    title: 'What counts',
+    body: 'Entries must be your own and made in shutterbuds. No hate, harassment, nudity or anything you would not show your grandma. Reposts, duplicates, bots and bought engagement do not count. We can disqualify entries that break these rules.',
+  },
+  {
+    title: 'Using your posts',
+    body: 'By posting with the hashtags you let [studio name] reshare and feature your post, with credit to you, on our channels and in marketing for shutterbuds.',
+  },
+  {
+    title: 'The fine print',
+    body: 'This giveaway is not sponsored, endorsed or run by Instagram, TikTok or YouTube. Void where prohibited. Sponsor: [studio name, address]. Questions: [contact email].',
+  },
 ];
 
 const metadata = { title: 'Race to 1000!' };
@@ -75,10 +116,10 @@ const metadata = { title: 'Race to 1000!' };
       </div>
     </header>
 
-    <!-- Snap counter -->
-    <section class="sb-progress" aria-label="Snaps posted so far">
+    <!-- Post counter -->
+    <section class="sb-progress" aria-label="Posts so far">
       <p class="sb-count">
-        <span class="sb-count-num">{SNAPS}</span> / {GOAL}
+        <span class="sb-count-num">{POSTS}</span> / {GOAL}
       </p>
       <div class="sb-strip">
         <div
@@ -86,108 +127,157 @@ const metadata = { title: 'Race to 1000!' };
           role="progressbar"
           aria-valuemin="0"
           aria-valuemax={GOAL}
-          aria-valuenow={SNAPS}
-          aria-label="Snaps posted"
+          aria-valuenow={POSTS}
+          aria-label="Photos and clips posted"
         >
           <div class="sb-bar-fill" style={`width:${pct}%`}></div>
         </div>
       </div>
-      <p class="sb-count-note">snaps posted</p>
+      <p class="sb-count-note">photos & clips posted</p>
     </section>
 
-    <!-- Hero -->
+    <!-- Banner -->
     <section class="sb-hero">
-      <Image src={heroBg} alt="" class="sb-hero-img" widths={[800, 1280, 1920]} sizes="100vw" loading="eager" />
-      <div class="sb-hero-shade"></div>
+      <HeroScene />
       <h1 class="sb-hero-title">Race to 1000!</h1>
-
-      <div class="sb-hero-stage">
-        <figure class="sb-polaroid">
-          <Image src={buds} alt="Three buds running with cameras" width={400} class="sb-polaroid-img" />
-          <figcaption>the buds, hard at work</figcaption>
-        </figure>
-        <div class="sb-crate" aria-label="Mystery prize">
-          <span>?</span>
-        </div>
-      </div>
-      <div class="sb-mound" aria-hidden="true"></div>
     </section>
 
     <!-- Campaign -->
-    <main class="sb-wrap sb-campaign">
+    <main class="sb-wrap sb-wide sb-campaign">
       <div class="sb-campaign-head">
         <h2 class="sb-h2">Giveaway Campaign</h2>
         <div class="sb-underline" aria-hidden="true"></div>
       </div>
 
       <div class="sb-grid">
-        <!-- Unlock prize -->
+        <!-- Unlock prize: creature in a cage -->
         <aside class="sb-side">
           <Icon name="tabler:star-filled" class="sb-side-icon sb-star" />
-          <div class="sb-jar" aria-hidden="true">
-            <div class="sb-jar-lid"></div>
-            <div class="sb-jar-body">
-              <div class="sb-jar-blob"></div>
-              <span class="sb-jar-q">?</span>
-            </div>
-          </div>
+          <svg class="sb-cage" viewBox="0 0 170 210" aria-hidden="true">
+            <circle cx="85" cy="14" r="10" fill="none" stroke="#22190f" stroke-width="5"></circle>
+            <path d="M18 70 C18 20 152 20 152 70" fill="#8a6446" stroke="#22190f" stroke-width="5"></path>
+            <rect x="12" y="64" width="146" height="14" rx="5" fill="#8a6446" stroke="#22190f" stroke-width="5"></rect>
+            <rect x="20" y="78" width="130" height="104" fill="#e6f2d8"></rect>
+            <g transform="translate(28 96)">
+              <g fill="#15160f">
+                <path d="M26 30 L18 2 L40 22 Z"></path>
+                <path d="M70 22 L92 2 L86 32 Z"></path>
+                <ellipse cx="56" cy="50" rx="44" ry="32"></ellipse>
+                <path d="M96 52 C112 44 120 58 112 66 C106 60 100 62 96 62 Z"></path>
+                <rect x="24" y="70" width="16" height="16" rx="6"></rect>
+                <rect x="70" y="70" width="16" height="16" rx="6"></rect>
+              </g>
+              <ellipse cx="42" cy="44" rx="6" ry="7" fill="#f6f1c8"></ellipse>
+              <ellipse cx="66" cy="44" rx="6" ry="7" fill="#f6f1c8"></ellipse>
+              <circle cx="43" cy="46" r="2.6" fill="#15160f"></circle>
+              <circle cx="67" cy="46" r="2.6" fill="#15160f"></circle>
+            </g>
+            <g stroke="#22190f" stroke-width="5" stroke-linecap="round">
+              <path d="M22 78 V182 M48 78 V182 M74 78 V182 M100 78 V182 M126 78 V182 M150 78 V182"></path>
+            </g>
+            <rect x="8" y="180" width="154" height="20" rx="6" fill="#8a6446" stroke="#22190f" stroke-width="5"></rect>
+            <g transform="translate(132 98) rotate(10)">
+              <rect x="-4" y="0" width="36" height="40" rx="6" fill="#f6eedd" stroke="#22190f" stroke-width="4"></rect>
+              <text
+                x="14"
+                y="32"
+                text-anchor="middle"
+                font-family="Fredoka, sans-serif"
+                font-weight="700"
+                font-size="32"
+                fill="#22190f">?</text
+              >
+            </g>
+          </svg>
           <h3 class="sb-side-title">Release</h3>
           <p class="sb-side-sub">a new creature</p>
-          <p class="sb-side-note">hit 1000 to pop the lid</p>
+          <p class="sb-side-note">hit 1000 to open the cage</p>
         </aside>
 
-        <!-- Job notice -->
+        <!-- Job notice + rules -->
         <article class="sb-card">
           <div class="sb-tape" aria-hidden="true"></div>
-          <div class="sb-card-text">
-            <p class="sb-card-kicker">
-              <svg class="sb-leaf" aria-hidden="true"><use href="#sb-leaf"></use></svg>
-              new job posted!
-            </p>
-            <h3 class="sb-card-title">You are jobless!</h3>
-            <p>
-              Not anymore. For the next 2 weeks every bud gets the same job: take photos in shutterbuds and post them
-              with <strong>#Shutterbuds</strong>.
-            </p>
-            <ul class="sb-steps">
+
+          <div class="sb-card-top">
+            <div class="sb-card-text">
+              <p class="sb-card-kicker">
+                <svg class="sb-leaf" aria-hidden="true"><use href="#sb-leaf"></use></svg>
+                new job posted!
+              </p>
+              <h3 class="sb-card-title">You are jobless!</h3>
+              <p>
+                Not anymore. For the next 2 weeks every bud gets the same job: snap photos or clips of your crew
+                wranglin' 'n ridin' a Hufu, then post them with <strong>#Shutterbuds</strong>.
+              </p>
+              <ul class="sb-steps">
+                {
+                  jobSteps.map((step) => (
+                    <li>
+                      <svg class="sb-leaf" aria-hidden="true">
+                        <use href="#sb-leaf" />
+                      </svg>
+                      <span>{step}</span>
+                    </li>
+                  ))
+                }
+              </ul>
+              <p class="sb-card-sign">No purchase needed. Just buds being buds.</p>
+            </div>
+
+            <div class="sb-card-media">
+              <div class="sb-circles">
+                {
+                  socials.map((s, i) => (
+                    <span class={`sb-circle sb-c${i + 1} ${s.cls}`} role="img" aria-label={s.name}>
+                      <Icon name={s.icon} />
+                    </span>
+                  ))
+                }
+              </div>
+              <p class="sb-hashtags">#RaceTo1000<br />#Shutterbuds</p>
+            </div>
+          </div>
+
+          <section class="sb-rules" aria-labelledby="sb-rules-title">
+            <h3 id="sb-rules-title" class="sb-rules-title">Official rules</h3>
+            <ol class="sb-rules-list">
               {
-                jobSteps.map((step) => (
+                rules.map((r) => (
                   <li>
-                    <svg class="sb-leaf" aria-hidden="true">
-                      <use href="#sb-leaf" />
-                    </svg>
-                    <span>{step}</span>
+                    <strong>{r.title}.</strong> {r.body}
                   </li>
                 ))
               }
-            </ul>
-            <p class="sb-card-sign">2 weeks on the clock. go go go!</p>
-          </div>
-
-          <div class="sb-card-media">
-            <div class="sb-circles">
-              <Image
-                src={snap1}
-                alt="A snap of the stone statue through the viewfinder"
-                width={300}
-                class="sb-circle sb-c1"
-              />
-              <Image src={snap2} alt="A snap of a mossy cave" width={300} class="sb-circle sb-c2" />
-              <Image src={snap3} alt="A snap of the fire tower at night" width={300} class="sb-circle sb-c3" />
-            </div>
-            <p class="sb-hashtags">#RaceTo1000<br />#Shutterbuds</p>
-          </div>
+            </ol>
+          </section>
         </article>
 
-        <!-- Team prize -->
+        <!-- Team prize: crochet kit -->
         <aside class="sb-side">
           <Icon name="tabler:crown-filled" class="sb-side-icon sb-crown" />
           <div class="sb-slot" aria-hidden="true">
-            <Icon name="tabler:ticket" />
+            <svg viewBox="0 0 120 120">
+              <path d="M18 104 L104 20" stroke="#22190f" stroke-width="11" stroke-linecap="round"></path>
+              <path d="M18 104 L104 20" stroke="#d9c7a3" stroke-width="5" stroke-linecap="round"></path>
+              <path d="M104 20 l-8 -2" stroke="#22190f" stroke-width="5" stroke-linecap="round"></path>
+              <circle cx="56" cy="64" r="36" fill="#e86bb8" stroke="#22190f" stroke-width="5"></circle>
+              <g fill="none" stroke="#b3438b" stroke-width="4" stroke-linecap="round">
+                <path d="M28 52 C44 42 70 42 88 54"></path>
+                <path d="M24 66 C44 56 72 56 92 70"></path>
+                <path d="M30 82 C46 72 70 72 86 84"></path>
+                <path d="M46 30 C38 50 38 76 48 98"></path>
+              </g>
+              <path
+                d="M84 88 C96 98 100 108 112 108"
+                fill="none"
+                stroke="#22190f"
+                stroke-width="4"
+                stroke-linecap="round"></path>
+            </svg>
           </div>
           <h3 class="sb-side-title">#1 Team</h3>
-          <p class="sb-side-sub">gets special prize</p>
-          <p class="sb-side-note">most snaps takes it</p>
+          <p class="sb-side-sub">gets free crochet kits</p>
+          <p class="sb-side-note">shipped to the top crews, on us</p>
         </aside>
       </div>
     </main>
@@ -202,7 +292,7 @@ const metadata = { title: 'Race to 1000!' };
   .sb {
     --sb-cream: #f6eedd;
     --sb-paper: #fffcf4;
-    --sb-ink: #2b2118;
+    --sb-ink: #22190f;
     --sb-brown: #5b3a22;
     --sb-brown-soft: #8a6446;
     --sb-forest: #2e5e2a;
@@ -212,7 +302,6 @@ const metadata = { title: 'Race to 1000!' };
     --sb-display: 'Fredoka', 'Nunito', system-ui, sans-serif;
     --sb-body: 'Nunito', system-ui, sans-serif;
     --sb-hand: 'Patrick Hand', 'Comic Sans MS', cursive;
-    /* slightly wobbly, hand-drawn corners */
     --sb-wobble: 14px 6px 16px 5px / 5px 16px 6px 14px;
 
     background: var(--sb-paper);
@@ -222,13 +311,17 @@ const metadata = { title: 'Race to 1000!' };
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
   .sb-wrap {
     width: 100%;
     max-width: 1180px;
     margin: 0 auto;
     padding: 0 16px;
+  }
+  .sb-wide {
+    max-width: 1640px;
+    padding: 0 24px;
   }
   .sb-leaf {
     width: 1.15em;
@@ -272,7 +365,7 @@ const metadata = { title: 'Race to 1000!' };
     cursor: default;
   }
 
-  /* Snap counter */
+  /* Post counter */
   .sb-progress {
     text-align: center;
     padding: 10px 16px 14px;
@@ -283,7 +376,6 @@ const metadata = { title: 'Race to 1000!' };
     font-family: var(--sb-hand);
     font-size: 1.9rem;
     line-height: 1;
-    color: var(--sb-ink);
   }
   .sb-count-num {
     color: var(--sb-leaf);
@@ -300,7 +392,6 @@ const metadata = { title: 'Race to 1000!' };
     margin: 6px auto 0;
     padding: 0 10px;
   }
-  /* bracket end caps, like the mockup */
   .sb-strip::before,
   .sb-strip::after {
     content: '';
@@ -331,113 +422,33 @@ const metadata = { title: 'Race to 1000!' };
   .sb-bar-fill {
     height: 100%;
     background: var(--sb-lime);
-    border-right: 3px solid var(--sb-ink);
   }
 
-  /* Hero */
+  /* Banner */
   .sb-hero {
     position: relative;
-    height: clamp(340px, 44vw, 540px);
+    height: clamp(360px, 40vw, 600px);
     overflow: hidden;
-    border-bottom: 2px solid var(--sb-ink);
-    background: #1d2a3a;
-  }
-  .sb-hero-img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center 70%;
-  }
-  .sb-hero-shade {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to bottom, rgba(12, 18, 30, 0.45), rgba(12, 18, 30, 0) 40%);
+    border-bottom: 3px solid var(--sb-ink);
+    background: #8fd2ef;
   }
   .sb-hero-title {
     position: absolute;
-    top: clamp(14px, 3vw, 34px);
+    top: clamp(14px, 2.6vw, 34px);
     left: 0;
     right: 0;
     margin: 0;
     text-align: center;
     font-family: var(--sb-display);
     font-weight: 700;
-    font-size: clamp(2.4rem, 7vw, 5rem);
+    font-size: clamp(2.4rem, 6.5vw, 5rem);
     line-height: 1;
     color: var(--sb-cream);
     -webkit-text-stroke: 4px var(--sb-brown);
     paint-order: stroke fill;
     text-shadow: 0 5px 0 var(--sb-brown);
     transform: rotate(-2deg);
-  }
-  .sb-mound {
-    position: absolute;
-    left: 50%;
-    bottom: -30%;
-    width: min(70%, 640px);
-    height: 48%;
-    transform: translateX(-50%);
-    background: #4f8a31;
-    border: 3px solid var(--sb-ink);
-    border-radius: 50% 50% 0 0 / 100% 100% 0 0;
-    box-shadow: inset 0 10px 0 #6aa83f;
-  }
-  .sb-hero-stage {
-    position: absolute;
-    left: 50%;
-    bottom: 4%;
-    transform: translateX(-50%);
     z-index: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  .sb-polaroid {
-    margin: 0;
-    background: #fff;
-    padding: 8px 8px 4px;
-    border: 3px solid var(--sb-ink);
-    border-radius: 3px;
-    box-shadow: 4px 5px 0 rgba(0, 0, 0, 0.35);
-    transform: rotate(-4deg);
-  }
-  .sb-polaroid-img {
-    display: block;
-    width: clamp(120px, 17vw, 200px);
-    height: auto;
-    border: 2px solid var(--sb-ink);
-  }
-  .sb-polaroid figcaption {
-    font-family: var(--sb-hand);
-    font-size: clamp(0.85rem, 1.4vw, 1.05rem);
-    text-align: center;
-    color: var(--sb-ink);
-    padding-top: 2px;
-  }
-  .sb-crate {
-    margin-top: 6px;
-    width: clamp(64px, 8vw, 92px);
-    aspect-ratio: 1;
-    background:
-      linear-gradient(90deg, transparent 46%, rgba(0, 0, 0, 0.18) 46% 54%, transparent 54%),
-      repeating-linear-gradient(0deg, #a06a3c 0 14px, #8c5a30 14px 16px);
-    border: 4px solid var(--sb-ink);
-    border-radius: 4px;
-    box-shadow: 0 5px 0 rgba(0, 0, 0, 0.35);
-    display: grid;
-    place-items: center;
-    transform: rotate(3deg);
-  }
-  .sb-crate span {
-    font-family: var(--sb-display);
-    font-weight: 700;
-    font-size: clamp(2.2rem, 4.5vw, 3.2rem);
-    line-height: 1;
-    color: var(--sb-cream);
-    -webkit-text-stroke: 3px var(--sb-ink);
-    paint-order: stroke fill;
   }
 
   /* Campaign */
@@ -448,7 +459,7 @@ const metadata = { title: 'Race to 1000!' };
   }
   .sb-campaign-head {
     text-align: center;
-    margin-bottom: 28px;
+    margin-bottom: 32px;
   }
   .sb-h2 {
     margin: 0;
@@ -468,14 +479,18 @@ const metadata = { title: 'Race to 1000!' };
   }
   .sb-grid {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: 40px;
     align-items: start;
   }
-  @media (min-width: 900px) {
+  @media (min-width: 1000px) {
     .sb-grid {
-      grid-template-columns: 1fr 2.3fr 1fr;
-      gap: 32px;
+      grid-template-columns: 190px minmax(0, 1fr) 190px;
+      gap: 36px;
+    }
+    .sb-side {
+      position: sticky;
+      top: 24px;
     }
   }
 
@@ -504,12 +519,12 @@ const metadata = { title: 'Race to 1000!' };
     margin: 18px 0 0;
     font-family: var(--sb-display);
     font-weight: 700;
-    font-size: 2.7rem;
+    font-size: 2.6rem;
     line-height: 1;
-    color: var(--sb-ink);
+    white-space: nowrap;
   }
   .sb-side-sub {
-    margin: 2px 0 0;
+    margin: 4px 0 0;
     font-family: var(--sb-hand);
     font-size: 1.4rem;
     line-height: 1.1;
@@ -520,118 +535,64 @@ const metadata = { title: 'Race to 1000!' };
     font-size: 1.05rem;
     color: var(--sb-brown-soft);
   }
-
-  /* Creature jar */
-  .sb-jar {
-    width: 150px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  .sb-jar-lid {
-    width: 118px;
-    height: 22px;
-    background: var(--sb-brown);
-    border: 3px solid var(--sb-ink);
-    border-radius: 6px 6px 3px 3px;
-    position: relative;
-    z-index: 1;
-  }
-  .sb-jar-body {
-    position: relative;
-    width: 150px;
-    height: 160px;
-    margin-top: -4px;
-    background: rgba(190, 228, 238, 0.55);
-    border: 4px solid var(--sb-ink);
-    border-radius: 26px 26px 34px 34px;
-    display: grid;
-    place-items: center;
-    overflow: hidden;
-  }
-  .sb-jar-body::after {
-    content: '';
-    position: absolute;
-    top: 16px;
-    left: 16px;
-    width: 12px;
-    height: 70px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.85);
-  }
-  .sb-jar-blob {
-    position: absolute;
-    width: 86px;
-    height: 74px;
-    bottom: 18px;
-    background: #3b3f2c;
-    border-radius: 48% 52% 44% 56% / 58% 50% 50% 42%;
-    box-shadow:
-      -18px 6px 0 -6px #3b3f2c,
-      20px 10px 0 -8px #3b3f2c;
-  }
-  .sb-jar-q {
-    position: relative;
-    font-family: var(--sb-display);
-    font-weight: 700;
-    font-size: 5.5rem;
-    line-height: 1;
-    color: var(--sb-cream);
-    -webkit-text-stroke: 4px var(--sb-ink);
-    paint-order: stroke fill;
-    transform: rotate(-6deg) translateY(-6px);
+  .sb-cage {
+    width: 170px;
+    height: auto;
+    filter: drop-shadow(4px 5px 0 rgba(34, 25, 15, 0.25));
   }
 
   /* Prize slot, styled like the in-game photo slots */
   .sb-slot {
-    width: 150px;
-    height: 150px;
+    width: 160px;
+    height: 160px;
     margin-top: 10px;
-    display: grid;
-    place-items: center;
-    background: var(--sb-leaf);
+    padding: 14px;
+    background: var(--sb-lime);
     border: 7px solid #fff;
     outline: 3px solid var(--sb-ink);
     border-radius: 6px 12px 5px 10px;
     box-shadow: 6px 6px 0 3px var(--sb-ink);
-    color: #fff;
-    font-size: 5.4rem;
-    transform: rotate(-6deg);
+    transform: rotate(-5deg);
   }
-  .sb-slot :global(svg) {
-    filter: drop-shadow(0 3px 0 var(--sb-ink));
+  .sb-slot svg {
+    width: 100%;
+    height: 100%;
+    display: block;
   }
 
-  /* Job notice card */
+  /* Card */
   .sb-card {
     position: relative;
     background: #fff;
     border: 4px solid var(--sb-ink);
     border-radius: var(--sb-wobble);
     box-shadow: 7px 7px 0 var(--sb-ink);
-    padding: 34px 28px 28px;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 24px;
+    padding: 38px clamp(20px, 3vw, 44px) 32px;
   }
-  @media (min-width: 640px) {
-    .sb-card {
-      grid-template-columns: 1.45fr 1fr;
-    }
-  }
-  @media (max-width: 899px) {
+  @media (max-width: 999px) {
     .sb-card {
       order: -1;
+    }
+  }
+  .sb-card-top {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+  @media (min-width: 720px) {
+    .sb-card-top {
+      grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+      align-items: center;
     }
   }
   .sb-tape {
     position: absolute;
     top: -16px;
     left: 50%;
-    width: 110px;
+    width: 120px;
     height: 30px;
     background: rgba(214, 190, 140, 0.85);
-    border: 2px solid rgba(43, 33, 24, 0.35);
+    border: 2px solid rgba(34, 25, 15, 0.35);
     transform: translateX(-50%) rotate(-3deg);
   }
   .sb-card-kicker {
@@ -647,15 +608,15 @@ const metadata = { title: 'Race to 1000!' };
     margin: 2px 0 10px;
     font-family: var(--sb-display);
     font-weight: 700;
-    font-size: 2rem;
+    font-size: 2.1rem;
     line-height: 1.1;
-    color: var(--sb-ink);
   }
   .sb-card-text p {
     line-height: 1.55;
   }
   .sb-card-text > p:not(.sb-card-kicker) {
     margin: 0 0 14px;
+    max-width: 62ch;
   }
   .sb-steps {
     list-style: none;
@@ -690,39 +651,61 @@ const metadata = { title: 'Race to 1000!' };
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     gap: 14px;
   }
   .sb-circles {
     position: relative;
-    width: 240px;
-    height: 230px;
+    width: 250px;
+    height: 236px;
   }
   .sb-circle {
     position: absolute;
     border-radius: 50%;
-    object-fit: cover;
     border: 5px solid #fff;
     outline: 3px solid var(--sb-ink);
     box-shadow: 4px 4px 0 2px var(--sb-ink);
+    display: grid;
+    place-items: center;
+    color: #fff;
+  }
+  .sb-circle :global(svg) {
+    width: 52%;
+    height: 52%;
   }
   .sb-c1 {
-    width: 104px;
-    height: 104px;
+    width: 106px;
+    height: 106px;
     top: 0;
-    right: 34px;
+    right: 36px;
   }
   .sb-c2 {
-    width: 122px;
-    height: 122px;
+    width: 124px;
+    height: 124px;
     bottom: 4px;
     left: 0;
   }
   .sb-c3 {
-    width: 96px;
-    height: 96px;
+    width: 98px;
+    height: 98px;
     bottom: 16px;
     right: 0;
+  }
+  .sb-ig {
+    background: radial-gradient(circle at 30% 110%, #fdd56a 0 18%, #f0573d 45%, #c83487 70%, #6a3dc4 100%);
+  }
+  .sb-tt {
+    background: #111;
+  }
+  .sb-tt :global(svg) {
+    filter: drop-shadow(-2px -1px 0 #25f4ee) drop-shadow(2px 1px 0 #fe2c55);
+  }
+  .sb-yt {
+    background: #fff;
+    color: #f00;
+  }
+  .sb-yt :global(svg) {
+    width: 64%;
+    height: 64%;
   }
   .sb-hashtags {
     margin: 0;
@@ -730,8 +713,43 @@ const metadata = { title: 'Race to 1000!' };
     font-family: var(--sb-hand);
     font-size: 1.6rem;
     line-height: 1.1;
-    color: var(--sb-ink);
     transform: rotate(-3deg);
+  }
+
+  /* Rules */
+  .sb-rules {
+    margin-top: 32px;
+    padding-top: 22px;
+    border-top: 3px dashed rgba(34, 25, 15, 0.35);
+  }
+  .sb-rules-title {
+    margin: 0 0 12px;
+    font-family: var(--sb-display);
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--sb-forest);
+  }
+  .sb-rules-list {
+    margin: 0;
+    padding-left: 1.4em;
+    list-style: decimal;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: #3d3226;
+  }
+  @media (min-width: 1100px) {
+    .sb-rules-list {
+      columns: 2;
+      column-gap: 48px;
+    }
+  }
+  .sb-rules-list li {
+    margin-bottom: 10px;
+    break-inside: avoid;
+  }
+  .sb-rules-list li::marker {
+    font-weight: 800;
+    color: var(--sb-forest);
   }
 
   /* Footer */
@@ -755,11 +773,8 @@ const metadata = { title: 'Race to 1000!' };
     .sb-logo-img {
       height: 38px;
     }
-    .sb-card {
-      padding: 30px 20px 22px;
-    }
-    .sb-mound {
-      width: 92%;
+    .sb-wide {
+      padding: 0 16px;
     }
   }
 </style>
